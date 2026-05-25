@@ -23,10 +23,8 @@ export default async function NotesPage({ searchParams }: PageProps) {
   });
 
   return (
-    <section>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <NotesClient searchWord={searchWord} currentPage={currentPage} />
-      </HydrationBoundary>
-    </section>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotesClient searchWord={searchWord} currentPage={currentPage} />
+    </HydrationBoundary>
   );
 }
