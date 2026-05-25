@@ -45,8 +45,8 @@ export default function NotesClient({
   }, [debouncedSearch, page, router, pathname]);
 
   const { data, isError, isLoading, isSuccess } = useQuery({
-    queryKey: ['notes', initialSearch, page],
-    queryFn: () => fetchNotes(initialSearch, page),
+    queryKey: ['notes', debouncedSearch, page],
+    queryFn: () => fetchNotes(debouncedSearch, page),
     placeholderData: keepPreviousData,
   });
 
@@ -58,7 +58,7 @@ export default function NotesClient({
   };
 
   return (
-    <div className={css.app}>
+    <section className={css.app}>
       <Toaster position="top-center" reverseOrder={false} />
 
       <header className={css.toolbar}>
@@ -90,6 +90,6 @@ export default function NotesClient({
       {!isError && !isLoading && notes.length === 0 && (
         <p className={css.empty}>No notes found...</p>
       )}
-    </div>
+    </section>
   );
 }
