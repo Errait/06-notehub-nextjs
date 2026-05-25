@@ -58,7 +58,7 @@ export default function NotesClient({
   };
 
   return (
-    <main className={css.app}>
+    <section className={css.app}>
       <Toaster position="top-center" reverseOrder={false} />
 
       <header className={css.toolbar}>
@@ -90,6 +90,6 @@ export default function NotesClient({
       {!isError && !isLoading && notes.length === 0 && (
         <p className={css.empty}>No notes found...</p>
       )}
-    </main>
+    </section>
   );
 }
