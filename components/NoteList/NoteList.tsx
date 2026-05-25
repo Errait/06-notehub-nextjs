@@ -2,7 +2,7 @@ import css from './NoteList.module.css';
 import type { Note } from '../../types/note';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteNote } from '../../lib/api';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export interface NoteListProps {
   notes: Note[];
@@ -10,7 +10,6 @@ export interface NoteListProps {
 
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   const deleteNoteMutation = useMutation({
     mutationFn: deleteNote,
@@ -18,10 +17,6 @@ export default function NoteList({ notes }: NoteListProps) {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
     },
   });
-
-  const viewDetailsById = (id: Note['id']) => {
-    router.push(`/notes/${id}`);
-  };
 
   const handleDeleteNote = (id: Note['id']) => {
     deleteNoteMutation.mutate(id);
@@ -35,12 +30,9 @@ export default function NoteList({ notes }: NoteListProps) {
 
           <div className={css.footer}>
             <span className={css.tag}>{note.tag}</span>
-            <button
-              className={css.button}
-              onClick={() => viewDetailsById(note.id)}
-            >
+            <Link href={`/notes/${note.id}`} className={css.button}>
               View details
-            </button>
+            </Link>
 
             <button
               className={css.button}

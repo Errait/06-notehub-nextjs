@@ -21,38 +21,40 @@ interface NotesClientProps {
 
 export default function NotesClient({
   searchWord: initialSearch,
-  currentPage,
+  currentPage: initialPage,
 }: NotesClientProps) {
   const router = useRouter();
   const pathname = usePathname();
 
   const [search, setSearch] = useState(initialSearch);
+  const [page, setPage] = useState(initialPage);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [debouncedSearch] = useDebounce(search, 300);
 
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
   useEffect(() => {
     const params = new URLSearchParams();
     if (debouncedSearch) params.set('search', debouncedSearch);
-    params.set('page', '1');
+    if (page > 1) params.set('page', page.toString());
     router.push(`${pathname}?${params.toString()}`);
-  }, [debouncedSearch, router, pathname]);
+  }, [debouncedSearch, page, router, pathname]);
 
   const { data, isError, isLoading, isSuccess } = useQuery({
-    queryKey: ['notes', initialSearch, currentPage],
-    queryFn: () => fetchNotes(initialSearch, currentPage),
+    queryKey: ['notes', initialSearch, page],
+    queryFn: () => fetchNotes(initialSearch, page),
     placeholderData: keepPreviousData,
   });
 
   const notes = data?.notes ?? [];
   const totalPages = data?.totalPages ?? 0;
 
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams();
-    if (initialSearch) params.set('search', initialSearch);
-    params.set('page', page.toString());
-
-    router.push(`${pathname}?${params.toString()}`);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
   };
 
   return (
@@ -60,12 +62,12 @@ export default function NotesClient({
       <Toaster position="top-center" reverseOrder={false} />
 
       <header className={css.toolbar}>
-        <SearchBox value={search} onChange={setSearch} />
+        <SearchBox onChange={handleSearchChange} />
 
         {isSuccess && totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
-            currentPage={currentPage}
+            currentPage={page}
             onPageChange={handlePageChange}
           />
         )}
