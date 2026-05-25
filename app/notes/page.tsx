@@ -24,9 +24,7 @@ export default async function NotesPage({ searchParams }: PageProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <main>
-        <NotesClient searchWord={searchWord} currentPage={currentPage} />
-      </main>
+      <NotesClient searchWord={searchWord} currentPage={currentPage} />
     </HydrationBoundary>
   );
 }
