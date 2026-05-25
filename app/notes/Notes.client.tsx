@@ -61,7 +61,7 @@ export default function NotesClient({
     <section className={css.app}>
       <Toaster position="top-center" reverseOrder={false} />
 
-      <header className={css.toolbar}>
+      <div className={css.toolbar}>
         <SearchBox onChange={handleSearchChange} />
 
         {isSuccess && totalPages > 1 && (
@@ -81,7 +81,7 @@ export default function NotesClient({
             <NoteForm onClose={() => setIsModalOpen(false)} />
           </Modal>
         )}
-      </header>
+      </div>
 
       {isLoading && <p className={css.loading}>Loading notes...</p>}
       {isError && <p className={css.error}>Something went wrong...</p>}
